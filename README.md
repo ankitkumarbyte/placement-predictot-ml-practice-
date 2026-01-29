@@ -22,16 +22,6 @@ An **end-to-end Machine Learning project** that predicts **student placement** b
 * 📱 **Responsive Design** – Works on desktop, tablet, and mobile
 
 ---
-
-## 📸 Screenshots
-
-<div align="center">
-  <img src="https://via.placeholder.com/800x450/667eea/ffffff?text=Placement+Prediction+Interface" width="400" alt="Interface">
-  <img src="https://via.placeholder.com/800x450/764ba2/ffffff?text=Results+with+Fun+Messages" width="400" alt="Results">
-</div>
-
----
-
 ## 🚀 Quick Start
 
 ### Prerequisites
