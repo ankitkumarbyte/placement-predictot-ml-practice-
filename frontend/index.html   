@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 ML Placement Predictor</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1><i class="emoji">🎯</i> ML Placement Predictor</h1>
+            <p class="subtitle">Will you get placed? Let's find out!</p>
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-value" id="totalStudents">100</span>
+                    <span class="stat-label">Students</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="placedStudents">65</span>
+                    <span class="stat-label">Placed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="avgCgpa">7.2</span>
+                    <span class="stat-label">Avg CGPA</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="avgIq">128</span>
+                    <span class="stat-label">Avg IQ</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel: Input & Prediction -->
+            <div class="left-panel">
+                <div class="card prediction-card">
+                    <h2><i class="emoji">📊</i> Enter Your Details</h2>
+                    
+                    <div class="input-group">
+                        <label for="cgpaSlider">
+                            <i class="emoji">🎓</i> Your CGPA (0-10)
+                            <span class="value-display" id="cgpaValue">7.5</span>
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="cgpaSlider" min="0" max="10" step="0.1" value="7.5" class="slider">
+                            <input type="number" id="cgpaInput" min="0" max="10" step="0.1" value="7.5" class="number-input">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="iqSlider">
+                            <i class="emoji">🧠</i> Your IQ Score (50-200)
+                            <span class="value-display" id="iqValue">130</span>
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="iqSlider" min="50" max="200" value="130" class="slider">
+                            <input type="number" id="iqInput" min="50" max="200" value="130" class="number-input">
+                        </div>
+                    </div>
+
+                    <button id="predictBtn" class="predict-btn">
+                        <i class="emoji">🔮</i> PREDICT MY PLACEMENT
+                    </button>
+
+                    <!-- Result Display -->
+                    <div class="result-container">
+                        <div class="result-box" id="resultBox">
+                            <div class="result-icon" id="resultIcon">🤔</div>
+                            <div class="result-text" id="resultText">Ready for Prediction!</div>
+                            <div class="result-details" id="resultDetails">Enter your details above and click Predict</div>
+                            <div class="fun-message" id="funMessage">
+                                Waiting for your input...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card history-card">
+                    <h3><i class="emoji">📜</i> Recent Predictions</h3>
+                    <div id="historyList" class="history-list">
+                        <!-- History will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Charts & Data -->
+            <div class="right-panel">
+                <div class="card">
+                    <h2><i class="emoji">📈</i> Placement Statistics</h2>
+                    <div class="chart-container">
+                        <canvas id="placementChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="emoji">📋</i> Sample Data</h2>
+                    <div class="table-container">
+                        <table id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>CGPA</th>
+                                    <th>IQ</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Data will load here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <p><i class="emoji">🎓</i> ML Placement Predictor | End-to-End Machine Learning Project</p>
+                <p class="status">Status: <span id="backendStatus">Connecting...</span></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confettiContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

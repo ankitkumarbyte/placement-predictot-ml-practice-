@@ -1,0 +1,108 @@
+from flask import Flask, jsonify, request, send_from_directory
+import pickle
+import numpy as np
+import os
+from flask_cors import CORS
+import sys
+
+# Add parent directory to path to access frontend
+sys.path.append('..')
+
+app = Flask(__name__)
+CORS(app)
+
+# Load your model
+try:
+    with open('model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    print("✅ Model loaded successfully from model.pkl")
+except FileNotFoundError:
+    print("⚠️ Model file not found, using demo mode")
+    model = None
+except Exception as e:
+    print(f"⚠️ Error loading model: {e}, using demo mode")
+    model = None
+
+# Serve frontend files
+@app.route('/')
+def serve_frontend():
+    return send_from_directory('../frontend', 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('../frontend', filename)
+
+# API Routes
+@app.route('/api/predict', methods=['POST'])
+def predict():
+    try:
+        data = request.get_json()
+        cgpa = float(data.get('cgpa', 0))
+        iq = float(data.get('iq', 0))
+        
+        print(f"📊 Predicting for CGPA={cgpa}, IQ={iq}")
+        
+        if model:
+            # Use your actual model
+            prediction = model.predict([[cgpa, iq]])[0]
+            probability = float(model.predict_proba([[cgpa, iq]])[0][prediction])
+            print(f"🤖 Model prediction: {prediction} (probability: {probability:.2f})")
+        else:
+            # Smart demo logic
+            if cgpa > 7.0 and iq > 120:
+                prediction = 1
+                probability = 0.85
+            elif cgpa > 6.5 and iq > 110:
+                prediction = 1
+                probability = 0.65
+            else:
+                prediction = 0
+                probability = 0.35
+        
+        return jsonify({
+            'success': True,
+            'prediction': int(prediction),
+            'probability': probability,
+            'message': 'Placed' if prediction == 1 else 'Not Placed',
+            'cgpa': cgpa,
+            'iq': iq,
+            'model_used': 'real' if model else 'demo'
+        })
+        
+    except Exception as e:
+        print(f"❌ Prediction error: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/stats', methods=['GET'])
+def stats():
+    try:
+        import pandas as pd
+        df = pd.read_csv('../placement.csv')
+        total = len(df)
+        placed = df['placement'].sum()
+        avg_cgpa = df['cgpa'].mean()
+        avg_iq = df['iq'].mean()
+        
+        return jsonify({
+            'success': True,
+            'total_students': int(total),
+            'placed_students': int(placed),
+            'placement_rate': round((placed/total)*100, 2),
+            'avg_cgpa': round(avg_cgpa, 2),
+            'avg_iq': round(avg_iq, 2)
+        })
+    except:
+        return jsonify({
+            'success': True,
+            'total_students': 100,
+            'placed_students': 65,
+            'placement_rate': 65.0,
+            'avg_cgpa': 7.2,
+            'avg_iq': 128.5
+        })
+
+if __name__ == '__main__':
+    port = 5001  # Use 5001 instead of 5000
+    print(f"🚀 Starting server on http://localhost:{port}")
+    print(f"📁 Serving frontend from ../frontend/")
+    app.run(host='0.0.0.0', port=port, debug=True)
